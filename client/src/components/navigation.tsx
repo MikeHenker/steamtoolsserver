@@ -1,7 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { useAuth, logout } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import logoImage from "@assets/image_1759348974994.png";
+import logoImage from "@assets/o_1j3u27o5h1gih1k92joq1ne07q2r_1759348995794.gif";
 
 export default function Navigation() {
   const [location] = useLocation();

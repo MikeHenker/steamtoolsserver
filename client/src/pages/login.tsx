@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import logoImage from "@assets/image_1759348974994.png";
+import logoImage from "@assets/o_1j3u27o5h1gih1k92joq1ne07q2r_1759348995794.gif";
 
 export default function Login() {
   const [, setLocation] = useLocation();
