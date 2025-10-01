@@ -14,7 +14,7 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 flex items-center justify-center">
-              <img src="/logo.gif" alt="Steamtools Logo" className="w-10 h-10 rounded-lg object-cover" />
+              <img src="/logo.svg" alt="Steamtools Logo" className="w-10 h-10 rounded-lg object-cover" />
             </div>
             <div>
               <h1 className="text-xl font-bold">Steamtools</h1>
