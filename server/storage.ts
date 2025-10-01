@@ -73,6 +73,7 @@ export interface IStorage {
 
   // Requests
   getAllRequests(): Promise<GameRequest[]>;
+  getAllRequestsWithUsers(): Promise<any[]>;
   getRequestsByUser(userId: string): Promise<GameRequest[]>;
   createRequest(request: InsertRequest): Promise<GameRequest>;
   updateRequestStatus(id: string, status: string): Promise<GameRequest>;
@@ -247,6 +248,27 @@ export class DatabaseStorage implements IStorage {
   // Requests
   async getAllRequests(): Promise<GameRequest[]> {
     return db.select().from(requests).orderBy(desc(requests.createdAt));
+  }
+
+  async getAllRequestsWithUsers(): Promise<any[]> {
+    const result = await db
+      .select({
+        id: requests.id,
+        gameName: requests.gameName,
+        steamId: requests.steamId,
+        description: requests.description,
+        userId: requests.userId,
+        status: requests.status,
+        createdAt: requests.createdAt,
+        user: {
+          username: users.username,
+        },
+      })
+      .from(requests)
+      .leftJoin(users, eq(requests.userId, users.id))
+      .orderBy(desc(requests.createdAt));
+    
+    return result;
   }
 
   async getRequestsByUser(userId: string): Promise<GameRequest[]> {

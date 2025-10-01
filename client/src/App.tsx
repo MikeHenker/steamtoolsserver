@@ -11,6 +11,7 @@ import Games from "@/pages/games";
 import Requests from "@/pages/requests";
 import Users from "@/pages/users";
 import Profile from "@/pages/profile";
+import AdminPanel from "@/pages/admin";
 import Navigation from "@/components/navigation";
 
 function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
@@ -47,6 +48,9 @@ function Router() {
       </Route>
       <Route path="/users">
         <ProtectedRoute component={Users} />
+      </Route>
+      <Route path="/admin">
+        <ProtectedRoute component={AdminPanel} />
       </Route>
       <Route path="/profile">
         <ProtectedRoute component={Profile} />

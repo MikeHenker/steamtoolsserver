@@ -266,6 +266,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/admin/requests", authenticateToken, requireRole("admin"), async (req, res) => {
+    try {
+      const requests = await storage.getAllRequestsWithUsers();
+      res.json(requests);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   app.post("/api/requests", authenticateToken, async (req, res) => {
     try {
       const { userId } = (req as any).user;

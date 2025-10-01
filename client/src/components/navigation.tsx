@@ -46,13 +46,22 @@ export default function Navigation() {
               <i className="fas fa-paper-plane mr-2"></i>Requests
             </Link>
             {user?.role === "admin" && (
-              <Link 
-                href="/users"
-                className={`py-2 px-3 text-sm font-semibold transition-colors ${isActive('/users') ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`} 
-                data-testid="link-users"
-              >
-                <i className="fas fa-users mr-2"></i>Users
-              </Link>
+              <>
+                <Link 
+                  href="/admin"
+                  className={`py-2 px-3 text-sm font-semibold transition-colors ${isActive('/admin') ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`} 
+                  data-testid="link-admin"
+                >
+                  <i className="fas fa-shield-alt mr-2"></i>Admin
+                </Link>
+                <Link 
+                  href="/users"
+                  className={`py-2 px-3 text-sm font-semibold transition-colors ${isActive('/users') ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`} 
+                  data-testid="link-users"
+                >
+                  <i className="fas fa-users mr-2"></i>Users
+                </Link>
+              </>
             )}
             <Link 
               href="/profile"
