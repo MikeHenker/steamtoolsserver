@@ -1,8 +1,22 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { exec } from "child_process";
+import { promisify } from "util";
+
+const execAsync = promisify(exec);
 
 const app = express();
+
+async function runMigrations() {
+  try {
+    log("Running database migrations...");
+    const { stdout } = await execAsync("npm run db:push -- --force");
+    log("Database migrations completed");
+  } catch (error: any) {
+    log(`Migration warning: ${error.message}`);
+  }
+}
 
 declare module 'http' {
   interface IncomingMessage {
@@ -47,6 +61,8 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  await runMigrations();
+  
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
