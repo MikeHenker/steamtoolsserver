@@ -1,7 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useAuth, logout } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import logoGif from "@assets/o_1j3u27o5h1gih1k92joq1ne07q2r_1759346178377.gif";
 
 export default function Navigation() {
   const [location] = useLocation();
@@ -15,7 +14,7 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 flex items-center justify-center">
-              <img src={logoGif} alt="Steamtools Logo" className="w-10 h-10 rounded-lg object-cover" />
+              <img src="/logo.gif" alt="Steamtools Logo" className="w-10 h-10 rounded-lg object-cover" />
             </div>
             <div>
               <h1 className="text-xl font-bold">Steamtools</h1>
