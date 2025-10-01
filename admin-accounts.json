@@ -1,0 +1,20 @@
+[
+  {
+    "username": "khaedus",
+    "email": "khaedus@admin.com",
+    "password": "$2b$10$du3sSd1oySsfo5SQe7RqJONXixlGTkzbiESMRgSqkSpb/OR3Kh4qW",
+    "role": "admin"
+  },
+  {
+    "username": "malte",
+    "email": "malte@admin.com",
+    "password": "$2b$10$F3zWwA0QdflQrwzU6dz4JO6ZuIzCOS9wWTQg229NYF5hwZbqRmzaq",
+    "role": "admin"
+  },
+  {
+    "username": "jupiter",
+    "email": "jupiter@admin.com",
+    "password": "$2b$10$wMsKB0EJgMes6dUkp.REYevPCdWN6Pr7QeQn1TVlT90IZGdzTsQz6",
+    "role": "admin"
+  }
+]
