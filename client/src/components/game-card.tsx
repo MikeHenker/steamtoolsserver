@@ -62,14 +62,19 @@ export default function GameCard({ game }: GameCardProps) {
           )}
           <div className="absolute top-3 right-3">
             <button
-              className="w-9 h-9 bg-black/60 hover:bg-primary/80 rounded-lg flex items-center justify-center transition-all backdrop-blur-sm"
+              className="w-9 h-9 bg-black/60 hover:bg-primary/80 rounded-lg flex items-center justify-center transition-all backdrop-blur-sm relative overflow-hidden"
               onClick={(e) => {
                 e.stopPropagation();
                 toggleFavorite.mutate();
               }}
               data-testid={`button-favorite-${game.id}`}
             >
-              <i className="fas fa-heart text-white"></i>
+              <img 
+                src="/attached_assets/o_1j3u27o5h1gih1k92joq1ne07q2r_1759346178377.gif" 
+                alt="" 
+                className="absolute inset-0 w-full h-full object-cover opacity-30"
+              />
+              <i className="fas fa-heart text-white relative z-10"></i>
             </button>
           </div>
           <div className="absolute bottom-3 left-3 right-3">
