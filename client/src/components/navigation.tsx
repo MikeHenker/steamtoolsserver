@@ -1,0 +1,70 @@
+import { Link, useLocation } from "wouter";
+import { useAuth, logout } from "@/lib/auth";
+import { Button } from "@/components/ui/button";
+
+export default function Navigation() {
+  const [location] = useLocation();
+  const { user } = useAuth();
+
+  const isActive = (path: string) => location === path;
+
+  return (
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-card border-b border-border backdrop-blur-lg bg-opacity-90">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
+              <i className="fas fa-gamepad text-xl text-white"></i>
+            </div>
+            <div>
+              <h1 className="text-xl font-bold">Steamtools</h1>
+              <p className="text-xs text-muted-foreground">Gaming Platform</p>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <Link href="/">
+              <a className={`py-2 px-3 text-sm font-semibold transition-colors ${isActive('/') ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`} data-testid="link-home">
+                <i className="fas fa-home mr-2"></i>Home
+              </a>
+            </Link>
+            <Link href="/games">
+              <a className={`py-2 px-3 text-sm font-semibold transition-colors ${isActive('/games') ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`} data-testid="link-games">
+                <i className="fas fa-gamepad mr-2"></i>Games
+              </a>
+            </Link>
+            <Link href="/requests">
+              <a className={`py-2 px-3 text-sm font-semibold transition-colors ${isActive('/requests') ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`} data-testid="link-requests">
+                <i className="fas fa-paper-plane mr-2"></i>Requests
+              </a>
+            </Link>
+            {user?.role === "admin" && (
+              <Link href="/users">
+                <a className={`py-2 px-3 text-sm font-semibold transition-colors ${isActive('/users') ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`} data-testid="link-users">
+                  <i className="fas fa-users mr-2"></i>Users
+                </a>
+              </Link>
+            )}
+            <Link href="/profile">
+              <a className={`py-2 px-3 text-sm font-semibold transition-colors ${isActive('/profile') ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`} data-testid="link-profile">
+                <i className="fas fa-user mr-2"></i>Profile
+              </a>
+            </Link>
+
+            <div className="flex items-center space-x-2 px-3 py-1.5 bg-secondary rounded-lg">
+              <span className="text-2xl">{user?.avatar || '🎮'}</span>
+              <div className="text-sm">
+                <p className="font-semibold" data-testid="text-username">{user?.username}</p>
+                <p className="text-xs text-accent" data-testid="text-role">{user?.role}</p>
+              </div>
+            </div>
+
+            <Button variant="ghost" size="sm" onClick={logout} data-testid="button-logout">
+              <i className="fas fa-sign-out-alt"></i>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+}
