@@ -3,6 +3,7 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { exec } from "child_process";
 import { promisify } from "util";
+import { seedAdmins } from "./seed-admins";
 
 const execAsync = promisify(exec);
 
@@ -62,6 +63,7 @@ app.use((req, res, next) => {
 
 (async () => {
   await runMigrations();
+  await seedAdmins();
   
   const server = await registerRoutes(app);
 
