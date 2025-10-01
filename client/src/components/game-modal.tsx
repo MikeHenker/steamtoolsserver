@@ -1,6 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { authenticatedApiRequest, useAuth } from "@/lib/auth";
+import { queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import StarRating from "@/components/star-rating";
 import CommentSection from "@/components/comment-section";
+import { useToast } from "@/hooks/use-toast";
 import type { Game, Rating } from "@shared/schema";
 
 interface GameModalProps {
@@ -14,9 +20,54 @@ interface RatingsData {
 }
 
 export default function GameModal({ game, onClose }: GameModalProps) {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [userRating, setUserRating] = useState(0);
+  const [review, setReview] = useState("");
+  const [showRatingForm, setShowRatingForm] = useState(false);
+
   const { data: ratingsData } = useQuery<RatingsData>({
     queryKey: ["/api/ratings", game.id],
   });
+
+  const { data: userRatingsData } = useQuery<Rating[]>({
+    queryKey: ["/api/ratings/user", user?.id],
+    enabled: !!user,
+  });
+
+  const existingRating = userRatingsData?.find(r => r.gameId === game.id);
+
+  const submitRating = useMutation({
+    mutationFn: async () => {
+      await authenticatedApiRequest("POST", "/api/ratings", {
+        gameId: game.id,
+        rating: userRating,
+        review: review || undefined,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/ratings"] });
+      toast({
+        title: "Rating submitted",
+        description: "Your rating has been saved",
+      });
+      setShowRatingForm(false);
+      setReview("");
+    },
+    onError: (error: Error) => {
+      toast({
+        variant: "destructive",
+        title: "Failed to submit rating",
+        description: error.message,
+      });
+    },
+  });
+
+  const handleDownload = () => {
+    if (game.downloadUrl) {
+      window.open(game.downloadUrl, "_blank");
+    }
+  };
 
   return (
     <div
@@ -48,19 +99,8 @@ export default function GameModal({ game, onClose }: GameModalProps) {
           <div className="flex items-start justify-between mb-6">
             <div>
               <h2 className="text-3xl font-bold mb-2" data-testid="text-modal-title">{game.title}</h2>
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-1">
-                  <i className="fas fa-star text-chart-4"></i>
-                  <span className="font-semibold" data-testid="text-modal-rating">
-                    {ratingsData?.average?.toFixed(1) || "N/A"}
-                  </span>
-                  <span className="text-sm text-muted-foreground">
-                    ({ratingsData?.ratings?.length || 0} ratings)
-                  </span>
-                </div>
-              </div>
             </div>
-            <Button data-testid="button-modal-download">
+            <Button onClick={handleDownload} data-testid="button-modal-download">
               <i className="fas fa-download mr-2"></i>Download
             </Button>
           </div>

@@ -44,7 +44,7 @@ export default function Home() {
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="relative rounded-2xl overflow-hidden mb-8 h-80">
           <img
-            src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=600"
+            src="https://imgs.search.brave.com/OF2ko0gCbnzSRvgQhN7YbrhoaWLayr4xQGM0l7gGMhA/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzNhLzJl/LzMxLzNhMmUzMTE2/NGM2YWNlZWUxYTZk/YzQxYTExM2ZjYzYz/LmpwZw"
             alt="Gaming setup"
             className="w-full h-full object-cover"
           />
@@ -63,7 +63,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <div className="bg-card border border-border rounded-xl p-6">
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center">
@@ -89,40 +89,15 @@ export default function Home() {
           <div className="bg-card border border-border rounded-xl p-6">
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 bg-chart-3/20 rounded-lg flex items-center justify-center">
-                <i className="fas fa-download text-chart-3 text-xl"></i>
+                <i className="fas fa-fire text-chart-3 text-xl"></i>
               </div>
-              <span className="text-sm text-muted-foreground">This Month</span>
+              <span className="text-sm text-muted-foreground">Popular</span>
             </div>
-            <h3 className="text-3xl font-bold mb-1" data-testid="text-total-downloads">{stats?.totalDownloads || 0}</h3>
-            <p className="text-sm text-muted-foreground">Total Downloads</p>
-          </div>
-
-          <div className="bg-card border border-border rounded-xl p-6">
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 bg-chart-4/20 rounded-lg flex items-center justify-center">
-                <i className="fas fa-star text-chart-4 text-xl"></i>
-              </div>
-              <span className="text-sm text-muted-foreground">Average</span>
-            </div>
-            <h3 className="text-3xl font-bold mb-1" data-testid="text-average-rating">{stats?.averageRating?.toFixed(1) || 0}</h3>
-            <p className="text-sm text-muted-foreground">User Rating</p>
+            <h3 className="text-3xl font-bold mb-1">{featuredGames.length || 0}</h3>
+            <p className="text-sm text-muted-foreground">Featured Games</p>
           </div>
         </div>
 
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-2xl font-bold">Featured Games</h3>
-            <Button variant="ghost" onClick={() => setLocation("/games")} data-testid="button-view-all">
-              View All <i className="fas fa-arrow-right ml-2"></i>
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredGames.map((game) => (
-              <GameCard key={game.id} game={game} />
-            ))}
-          </div>
-        </div>
       </div>
     </main>
   );
