@@ -345,7 +345,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       let rating;
       if (existingRating) {
-        rating = await storage.updateRating(existingRating.id, data.rating, data.review);
+        rating = await storage.updateRating(existingRating.id, data.rating, data.review || undefined);
       } else {
         rating = await storage.createRating(data);
       }

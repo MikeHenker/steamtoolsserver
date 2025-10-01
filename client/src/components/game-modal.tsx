@@ -1,15 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import CommentSection from "./comment-section";
-import type { Game } from "@shared/schema";
+import CommentSection from "@/components/comment-section";
+import type { Game, Rating } from "@shared/schema";
 
 interface GameModalProps {
   game: Game;
   onClose: () => void;
 }
 
+interface RatingsData {
+  ratings: Rating[];
+  average: number;
+}
+
 export default function GameModal({ game, onClose }: GameModalProps) {
-  const { data: ratingsData } = useQuery({
+  const { data: ratingsData } = useQuery<RatingsData>({
     queryKey: ["/api/ratings", game.id],
   });
 

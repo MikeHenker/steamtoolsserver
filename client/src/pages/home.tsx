@@ -2,7 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import GameCard from "@/components/game-card";
-import type { Game } from "@shared/schema";
+import type { Game, Announcement } from "@shared/schema";
+
+interface Stats {
+  totalGames: number;
+  totalUsers: number;
+  totalDownloads: number;
+  averageRating: number;
+}
 
 export default function Home() {
   const [, setLocation] = useLocation();
@@ -11,11 +18,11 @@ export default function Home() {
     queryKey: ["/api/games?featured=true"],
   });
 
-  const { data: stats } = useQuery({
+  const { data: stats } = useQuery<Stats>({
     queryKey: ["/api/stats"],
   });
 
-  const { data: announcement } = useQuery({
+  const { data: announcement } = useQuery<Announcement | null>({
     queryKey: ["/api/announcements/active"],
   });
 

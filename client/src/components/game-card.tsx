@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { authenticatedApiRequest } from "@/lib/auth";
 import { queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
-import GameModal from "./game-modal";
+import GameModal from "@/components/game-modal";
 import type { Game } from "@shared/schema";
 
 interface GameCardProps {

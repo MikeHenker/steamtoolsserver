@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import logoImage from "@assets/image_1759346354784.png";
 
 export default function Login() {
   const [, setLocation] = useLocation();
@@ -48,8 +49,8 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center mx-auto mb-4">
-            <i className="fas fa-gamepad text-3xl text-white"></i>
+          <div className="w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <img src={logoImage} alt="Steamtools Logo" className="w-16 h-16 rounded-lg" />
           </div>
           <CardTitle className="text-2xl">Steamtools</CardTitle>
           <CardDescription>Gaming Platform</CardDescription>

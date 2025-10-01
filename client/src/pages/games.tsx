@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import GameCard from "@/components/game-card";
+import AddGameModal from "@/components/add-game-modal";
 import { useAuth } from "@/lib/auth";
 import type { Game } from "@shared/schema";
 
@@ -10,12 +11,14 @@ export default function Games() {
   const { user } = useAuth();
   const [genre, setGenre] = useState<string>("");
   const [search, setSearch] = useState<string>("");
+  const [showAddModal, setShowAddModal] = useState(false);
 
+  const queryKey = genre ? `/api/games?genre=${genre}` : "/api/games";
   const { data: games = [] } = useQuery<Game[]>({
-    queryKey: ["/api/games", genre && `?genre=${genre}`].filter(Boolean).join(""),
+    queryKey: [queryKey],
   });
 
-  const filteredGames = games.filter(game =>
+  const filteredGames = games.filter((game: Game) =>
     game.title.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -75,7 +78,11 @@ export default function Games() {
           </div>
 
           {canAddGames && (
-            <Button className="bg-accent text-accent-foreground" data-testid="button-add-game">
+            <Button 
+              className="bg-accent text-accent-foreground" 
+              onClick={() => setShowAddModal(true)}
+              data-testid="button-add-game"
+            >
               <i className="fas fa-plus mr-2"></i>Add Game
             </Button>
           )}
@@ -83,7 +90,7 @@ export default function Games() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {filteredGames.length > 0 ? (
-            filteredGames.map((game) => (
+            filteredGames.map((game: Game) => (
               <GameCard key={game.id} game={game} />
             ))
           ) : (
@@ -94,6 +101,8 @@ export default function Games() {
           )}
         </div>
       </div>
+
+      {showAddModal && <AddGameModal onClose={() => setShowAddModal(false)} />}
     </main>
   );
 }
