@@ -49,61 +49,73 @@ export default function Games() {
             </AlertDialogTitle>
             <AlertDialogDescription className="text-base space-y-4 pt-4">
               <p className="font-semibold text-foreground">
-                IMPORTANT: Please read this disclaimer carefully before proceeding.
+                WICHTIG: Bitte lesen Sie diese Hinweise sorgfältig durch.
               </p>
               
-              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 space-y-2">
-                <p className="font-semibold text-foreground">📚 Educational & Viewing Purposes Only</p>
+              <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 space-y-2">
+                <p className="font-semibold text-foreground">ℹ️ Nur technische Informationen</p>
                 <p>
-                  All content provided on this platform is strictly for <strong>educational and viewing purposes only</strong>. 
-                  This library is intended to showcase game modification files, scripts, and related content for learning purposes.
+                  Diese Plattform stellt <strong>KEINE Spiele, Raubkopien oder illegale Inhalte</strong> bereit. 
+                  Wir zeigen ausschließlich <strong>technische Informationen</strong> zu Modifikationsdateien und Skripten für Bildungszwecke.
+                </p>
+                <p className="text-sm italic">
+                  We DO NOT provide games, pirated content, or illegal files. This platform displays technical information only.
+                </p>
+              </div>
+
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 space-y-2">
+                <p className="font-semibold text-foreground">⚖️ Nutzerverantwortung</p>
+                <p>
+                  <strong>Jeder Nutzer ist selbst dafür verantwortlich</strong>, wie er die hier angezeigten Informationen verwendet. 
+                  Sie müssen sicherstellen, dass Ihre Nutzung:
+                </p>
+                <ul className="list-disc list-inside space-y-1 ml-2">
+                  <li>Mit allen geltenden Gesetzen übereinstimmt</li>
+                  <li>Die <a href="https://store.steampowered.com/subscriber_agreement/" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">Steam Nutzungsbedingungen</a> respektiert</li>
+                  <li>Keine Urheberrechte oder andere Rechte verletzt</li>
+                  <li>Nur für rechtmäßig erworbene Spiele erfolgt</li>
+                </ul>
+                <p className="text-sm italic mt-2">
+                  Each user is solely responsible for how they use the information displayed here.
                 </p>
               </div>
 
               <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 space-y-2">
-                <p className="font-semibold text-foreground">🚫 Anti-Piracy Statement</p>
+                <p className="font-semibold text-foreground">🚫 Keine Haftung</p>
                 <p>
-                  We <strong>do NOT condone, support, or encourage piracy</strong> in any form. Users are responsible for ensuring 
-                  they own legitimate copies of any games before using modification files. Piracy is illegal and violates copyright laws.
-                </p>
-              </div>
-
-              <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 space-y-2">
-                <p className="font-semibold text-foreground">⚖️ User Responsibility & Liability</p>
-                <p>
-                  By using this platform, you acknowledge that:
+                  Wir übernehmen <strong>KEINERLEI Haftung</strong> für:
                 </p>
                 <ul className="list-disc list-inside space-y-1 ml-2">
-                  <li>You are solely responsible for your use of any downloaded content</li>
-                  <li>We are NOT liable for how you use the files or any consequences thereof</li>
-                  <li>You agree to comply with all applicable local, national, and international laws</li>
-                  <li>Any misuse of content is entirely your responsibility</li>
-                  <li>We assume no responsibility for user actions or legal issues arising from misuse</li>
+                  <li>Die Verwendung der angezeigten Informationen</li>
+                  <li>Rechtliche Konsequenzen aus Ihrer Nutzung</li>
+                  <li>Verstöße gegen Nutzungsbedingungen von Drittanbietern</li>
+                  <li>Schäden oder Verluste jeglicher Art</li>
                 </ul>
+                <p className="text-sm italic mt-2">
+                  We assume NO LIABILITY for how you use this information or any consequences thereof.
+                </p>
               </div>
 
               <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4 space-y-2">
-                <p className="font-semibold text-foreground">📋 Terms & Conditions</p>
+                <p className="font-semibold text-foreground">📋 Steam Nutzungsbedingungen</p>
                 <p>
-                  By clicking "I Understand and Agree" below, you confirm that you:
+                  Bevor Sie fortfahren, lesen Sie bitte die offiziellen 
+                  <a href="https://store.steampowered.com/subscriber_agreement/" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80 font-semibold"> Steam Nutzungsbedingungen</a>, 
+                  um zu verstehen, was erlaubt ist und was nicht.
                 </p>
-                <ul className="list-disc list-inside space-y-1 ml-2">
-                  <li>Have read and understood this disclaimer</li>
-                  <li>Will use content for educational/viewing purposes only</li>
-                  <li>Own legitimate copies of games before using modifications</li>
-                  <li>Accept full responsibility for your actions</li>
-                  <li>Agree to hold this platform harmless from any legal issues</li>
-                </ul>
+                <p className="text-sm">
+                  Please read the official <a href="https://store.steampowered.com/subscriber_agreement/" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">Steam Terms of Service</a> to understand what is permitted.
+                </p>
               </div>
 
               <p className="text-sm text-muted-foreground italic text-center pt-2">
-                This platform is provided "as is" without warranties. We disclaim all liability for user actions.
+                Durch Klicken auf "Verstanden" bestätigen Sie, dass Sie diese Hinweise gelesen haben und die volle Verantwortung für Ihre Handlungen übernehmen.
               </p>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogAction onClick={() => setShowLegalDisclaimer(false)} className="w-full">
-              I Understand and Agree to These Terms
+              Verstanden / I Understand
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

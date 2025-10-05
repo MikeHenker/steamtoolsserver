@@ -45,15 +45,6 @@ export default function Navigation() {
             >
               <i className="fas fa-paper-plane mr-2"></i>Requests
             </Link>
-            <a 
-              href="https://payhip.com/b/p6Ohu"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="py-2 px-3 text-sm font-semibold transition-colors text-yellow-500 hover:text-yellow-400" 
-              data-testid="link-premium"
-            >
-              <i className="fas fa-crown mr-2"></i>Premium
-            </a>
             {user?.role === "admin" && (
               <>
                 <Link 
