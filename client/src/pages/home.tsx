@@ -13,7 +13,7 @@ interface Stats {
 
 export default function Home() {
   const [, setLocation] = useLocation();
-  
+
   const { data: featuredGames = [] } = useQuery<Game[]>({
     queryKey: ["/api/games?featured=true"],
   });
@@ -98,53 +98,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-primary/10 to-accent/10 border border-border rounded-2xl p-8 mb-8">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-3">🎮 Ultimate Games Package</h2>
-            <p className="text-muted-foreground">Get instant access to our complete collection</p>
-          </div>
-          
-          <div className="bg-card border border-border rounded-xl p-8 text-center mb-6">
-            <div className="w-20 h-20 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-4xl font-bold text-white">1299</span>
-            </div>
-            <h3 className="text-2xl font-bold mb-2">Games Included</h3>
-            <p className="text-muted-foreground mb-6">Download all Lua scripts and manifest files in one package</p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 text-left">
-              <div className="flex items-start space-x-3">
-                <i className="fas fa-check-circle text-primary text-xl mt-1"></i>
-                <div>
-                  <h4 className="font-semibold">Instant Access</h4>
-                  <p className="text-sm text-muted-foreground">Download immediately</p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-3">
-                <i className="fas fa-download text-accent text-xl mt-1"></i>
-                <div>
-                  <h4 className="font-semibold">All Files</h4>
-                  <p className="text-sm text-muted-foreground">Complete package</p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-3">
-                <i className="fas fa-infinity text-chart-3 text-xl mt-1"></i>
-                <div>
-                  <h4 className="font-semibold">Lifetime Access</h4>
-                  <p className="text-sm text-muted-foreground">One-time purchase</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="text-center">
-            <Button 
-              onClick={() => window.open('https://payhip.com/b/p6Ohu', '_blank')}
-              className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white text-lg px-8 py-6"
-              data-testid="button-get-package"
-            >
-              <i className="fas fa-shopping-cart mr-2"></i>Get 1299 Games Package
-            </Button>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         </div>
 
       </div>
