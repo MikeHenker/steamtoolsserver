@@ -127,6 +127,13 @@ export default function AddGameModal({ onClose }: AddGameModalProps) {
                   <SelectItem value="Adventure">Adventure</SelectItem>
                   <SelectItem value="Simulation">Simulation</SelectItem>
                   <SelectItem value="Puzzle">Puzzle</SelectItem>
+                  <SelectItem value="Horror">Horror</SelectItem>
+                  <SelectItem value="FPS">FPS</SelectItem>
+                  <SelectItem value="MOBA">MOBA</SelectItem>
+                  <SelectItem value="MMO">MMO</SelectItem>
+                  <SelectItem value="Indie">Indie</SelectItem>
+                  <SelectItem value="Fighting">Fighting</SelectItem>
+                  <SelectItem value="Platformer">Platformer</SelectItem>
                 </SelectContent>
               </Select>
             </div>
