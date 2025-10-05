@@ -4,6 +4,16 @@ import { authenticatedApiRequest, useAuth } from "@/lib/auth";
 import { queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import StarRating from "@/components/star-rating";
 import CommentSection from "@/components/comment-section";
 import { useToast } from "@/hooks/use-toast";
@@ -25,6 +35,7 @@ export default function GameModal({ game, onClose }: GameModalProps) {
   const [userRating, setUserRating] = useState(0);
   const [review, setReview] = useState("");
   const [showRatingForm, setShowRatingForm] = useState(false);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
 
   const { data: ratingsData } = useQuery<RatingsData>({
     queryKey: ["/api/ratings", game.id],
@@ -64,9 +75,14 @@ export default function GameModal({ game, onClose }: GameModalProps) {
   });
 
   const handleDownload = () => {
+    setShowDisclaimer(true);
+  };
+
+  const proceedDownload = () => {
     if (game.downloadUrl) {
       window.open(game.downloadUrl, "_blank");
     }
+    setShowDisclaimer(false);
   };
 
   return (
@@ -137,6 +153,66 @@ export default function GameModal({ game, onClose }: GameModalProps) {
           <CommentSection gameId={game.id} />
         </div>
       </div>
+
+      <AlertDialog open={showDisclaimer} onOpenChange={setShowDisclaimer}>
+        <AlertDialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-2xl flex items-center gap-2">
+              <i className="fas fa-exclamation-triangle text-yellow-500"></i>
+              Legal Disclaimer & Terms of Use
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-left space-y-4 text-base">
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+                <p className="font-semibold text-foreground mb-2">⚠️ IMPORTANT - READ CAREFULLY</p>
+                <p>By proceeding with this download, you acknowledge and agree to the following terms:</p>
+              </div>
+
+              <div className="space-y-3">
+                <div>
+                  <p className="font-semibold text-foreground">📚 Educational & Viewing Purposes Only</p>
+                  <p className="text-sm">This content is provided strictly for educational, research, and personal viewing purposes. It is intended for learning and reference only.</p>
+                </div>
+
+                <div>
+                  <p className="font-semibold text-foreground">🚫 Anti-Piracy Statement</p>
+                  <p className="text-sm">We do NOT condone, support, or encourage piracy in any form. We strongly oppose copyright infringement and illegal distribution of protected content. Users must own legitimate licenses for any software they download.</p>
+                </div>
+
+                <div>
+                  <p className="font-semibold text-foreground">⚖️ User Responsibility & Liability</p>
+                  <p className="text-sm">You are solely responsible for how you use the downloaded content. We are NOT liable for any actions you take with this content. We expressly disclaim all responsibility for any misuse, illegal activities, or copyright violations committed by users.</p>
+                </div>
+
+                <div>
+                  <p className="font-semibold text-foreground">🛡️ Legal Compliance</p>
+                  <p className="text-sm">You must comply with all applicable laws, including copyright laws, in your jurisdiction. Downloading or using copyrighted material without proper authorization may be illegal in your country.</p>
+                </div>
+
+                <div>
+                  <p className="font-semibold text-foreground">📝 No Warranty or Guarantee</p>
+                  <p className="text-sm">Content is provided "AS IS" without any warranties. We make no guarantees about accuracy, safety, or legality of the content. Use at your own risk.</p>
+                </div>
+
+                <div>
+                  <p className="font-semibold text-foreground">🔒 Indemnification</p>
+                  <p className="text-sm">By downloading, you agree to indemnify and hold harmless this platform, its operators, and affiliates from any claims, damages, or legal actions arising from your use of the downloaded content.</p>
+                </div>
+
+                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+                  <p className="font-semibold text-foreground text-sm">🚨 Final Warning</p>
+                  <p className="text-sm">If you do not agree with these terms or cannot legally download this content in your jurisdiction, you must NOT proceed. Clicking "I Agree" confirms your acceptance of full responsibility.</p>
+                </div>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>I Do Not Agree</AlertDialogCancel>
+            <AlertDialogAction onClick={proceedDownload}>
+              I Agree & Accept Full Responsibility
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
