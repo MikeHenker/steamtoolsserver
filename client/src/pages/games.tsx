@@ -224,6 +224,83 @@ export default function Games() {
             >
               Racing
             </Button>
+            <Button
+              variant={genre === "Sports" ? "default" : "secondary"}
+              onClick={() => setGenre("Sports")}
+              data-testid="button-filter-sports"
+            >
+              Sports
+            </Button>
+            <Button
+              variant={genre === "Adventure" ? "default" : "secondary"}
+              onClick={() => setGenre("Adventure")}
+              data-testid="button-filter-adventure"
+            >
+              Adventure
+            </Button>
+            <Button
+              variant={genre === "Simulation" ? "default" : "secondary"}
+              onClick={() => setGenre("Simulation")}
+              data-testid="button-filter-simulation"
+            >
+              Simulation
+            </Button>
+            <Button
+              variant={genre === "Puzzle" ? "default" : "secondary"}
+              onClick={() => setGenre("Puzzle")}
+              data-testid="button-filter-puzzle"
+            >
+              Puzzle
+            </Button>
+            <Button
+              variant={genre === "Horror" ? "default" : "secondary"}
+              onClick={() => setGenre("Horror")}
+              data-testid="button-filter-horror"
+            >
+              Horror
+            </Button>
+            <Button
+              variant={genre === "FPS" ? "default" : "secondary"}
+              onClick={() => setGenre("FPS")}
+              data-testid="button-filter-fps"
+            >
+              FPS
+            </Button>
+            <Button
+              variant={genre === "MOBA" ? "default" : "secondary"}
+              onClick={() => setGenre("MOBA")}
+              data-testid="button-filter-moba"
+            >
+              MOBA
+            </Button>
+            <Button
+              variant={genre === "MMO" ? "default" : "secondary"}
+              onClick={() => setGenre("MMO")}
+              data-testid="button-filter-mmo"
+            >
+              MMO
+            </Button>
+            <Button
+              variant={genre === "Indie" ? "default" : "secondary"}
+              onClick={() => setGenre("Indie")}
+              data-testid="button-filter-indie"
+            >
+              Indie
+            </Button>
+            <Button
+              variant={genre === "Fighting" ? "default" : "secondary"}
+              onClick={() => setGenre("Fighting")}
+              data-testid="button-filter-fighting"
+            >
+              Fighting
+            </Button>
+            <Button
+              variant={genre === "Platformer" ? "default" : "secondary"}
+              onClick={() => setGenre("Platformer")}
+              data-testid="button-filter-platformer"
+            >
+              Platformer
+            </Button>
           </div>
 
           {canAddGames && (
