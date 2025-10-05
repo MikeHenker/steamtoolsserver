@@ -42,80 +42,110 @@ export default function Games() {
   return (
     <main className="pt-16 min-h-screen">
       <AlertDialog open={showLegalDisclaimer} onOpenChange={setShowLegalDisclaimer}>
-        <AlertDialogContent className="max-w-2xl">
+        <AlertDialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-2xl font-bold text-center">
-              ⚠️ Legal Disclaimer & Terms of Use
+            <AlertDialogTitle className="flex items-center gap-2 text-xl">
+              <i className="fas fa-exclamation-triangle text-yellow-500"></i>
+              Legal Disclaimer & Terms of Use
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-base space-y-4 pt-4">
-              <p className="font-semibold text-foreground">
-                WICHTIG: Bitte lesen Sie diese Hinweise sorgfältig durch.
-              </p>
-              
-              <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 space-y-2">
-                <p className="font-semibold text-foreground">ℹ️ Nur technische Informationen</p>
-                <p>
-                  Diese Plattform stellt <strong>KEINE Spiele, Raubkopien oder illegale Inhalte</strong> bereit. 
-                  Wir zeigen ausschließlich <strong>technische Informationen</strong> zu Modifikationsdateien und Skripten für Bildungszwecke.
-                </p>
-                <p className="text-sm italic">
-                  We DO NOT provide games, pirated content, or illegal files. This platform displays technical information only.
+            <AlertDialogDescription className="space-y-4 text-left">
+              <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+                <p className="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
+                  IMPORTANT: Please read these notices carefully.
                 </p>
               </div>
 
-              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 space-y-2">
-                <p className="font-semibold text-foreground">⚖️ Nutzerverantwortung</p>
-                <p>
-                  <strong>Jeder Nutzer ist selbst dafür verantwortlich</strong>, wie er die hier angezeigten Informationen verwendet. 
-                  Sie müssen sicherstellen, dass Ihre Nutzung:
-                </p>
-                <ul className="list-disc list-inside space-y-1 ml-2">
-                  <li>Mit allen geltenden Gesetzen übereinstimmt</li>
-                  <li>Die <a href="https://store.steampowered.com/subscriber_agreement/" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">Steam Nutzungsbedingungen</a> respektiert</li>
-                  <li>Keine Urheberrechte oder andere Rechte verletzt</li>
-                  <li>Nur für rechtmäßig erworbene Spiele erfolgt</li>
-                </ul>
-                <p className="text-sm italic mt-2">
-                  Each user is solely responsible for how they use the information displayed here.
-                </p>
-              </div>
+              <div className="space-y-3">
+                <div className="border-l-4 border-blue-500 pl-4">
+                  <h4 className="font-semibold mb-2 flex items-center gap-2">
+                    <i className="fas fa-info-circle text-blue-500"></i>
+                    Technical Information Only
+                  </h4>
+                  <p className="text-sm">
+                    This platform provides <strong>NO games, pirated content, or illegal files</strong>.
+                    We display exclusively <strong>technical information</strong> about modification files and scripts for educational purposes.
+                  </p>
+                  <p className="text-xs italic mt-2 text-muted-foreground">
+                    We DO NOT provide games, pirated content, or illegal files. This platform displays technical information only.
+                  </p>
+                </div>
 
-              <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 space-y-2">
-                <p className="font-semibold text-foreground">🚫 Keine Haftung</p>
-                <p>
-                  Wir übernehmen <strong>KEINERLEI Haftung</strong> für:
-                </p>
-                <ul className="list-disc list-inside space-y-1 ml-2">
-                  <li>Die Verwendung der angezeigten Informationen</li>
-                  <li>Rechtliche Konsequenzen aus Ihrer Nutzung</li>
-                  <li>Verstöße gegen Nutzungsbedingungen von Drittanbietern</li>
-                  <li>Schäden oder Verluste jeglicher Art</li>
-                </ul>
-                <p className="text-sm italic mt-2">
-                  We assume NO LIABILITY for how you use this information or any consequences thereof.
-                </p>
-              </div>
+                <div className="border-l-4 border-orange-500 pl-4">
+                  <h4 className="font-semibold mb-2 flex items-center gap-2">
+                    <i className="fas fa-balance-scale text-orange-500"></i>
+                    User Responsibility
+                  </h4>
+                  <p className="text-sm mb-2">
+                    <strong>Each user is solely responsible</strong> for how they use the information displayed here.
+                    You must ensure that your usage:
+                  </p>
+                  <ul className="text-sm space-y-1 ml-4 list-disc">
+                    <li>Complies with all applicable laws</li>
+                    <li>Respects the <a href="https://store.steampowered.com/subscriber_agreement/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Steam Terms of Service</a></li>
+                    <li>Does not violate any copyrights or other rights</li>
+                    <li>Only applies to legally acquired games</li>
+                  </ul>
+                  <p className="text-xs italic mt-2 text-muted-foreground">
+                    Each user is solely responsible for how they use the information displayed here.
+                  </p>
+                </div>
 
-              <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4 space-y-2">
-                <p className="font-semibold text-foreground">📋 Steam Nutzungsbedingungen</p>
-                <p>
-                  Bevor Sie fortfahren, lesen Sie bitte die offiziellen 
-                  <a href="https://store.steampowered.com/subscriber_agreement/" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80 font-semibold"> Steam Nutzungsbedingungen</a>, 
-                  um zu verstehen, was erlaubt ist und was nicht.
-                </p>
-                <p className="text-sm">
-                  Please read the official <a href="https://store.steampowered.com/subscriber_agreement/" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">Steam Terms of Service</a> to understand what is permitted.
-                </p>
-              </div>
+                <div className="border-l-4 border-red-500 pl-4">
+                  <h4 className="font-semibold mb-2 flex items-center gap-2">
+                    <i className="fas fa-shield-alt text-red-500"></i>
+                    No Liability
+                  </h4>
+                  <p className="text-sm mb-2">
+                    We assume <strong>NO LIABILITY</strong> for:
+                  </p>
+                  <ul className="text-sm space-y-1 ml-4 list-disc">
+                    <li>The use of the displayed information</li>
+                    <li>Legal consequences from your usage</li>
+                    <li>Violations of third-party terms of service</li>
+                    <li>Damages or losses of any kind</li>
+                  </ul>
+                  <p className="text-xs italic mt-2 text-muted-foreground">
+                    We assume NO LIABILITY for how you use this information or any consequences thereof.
+                  </p>
+                </div>
 
-              <p className="text-sm text-muted-foreground italic text-center pt-2">
-                Durch Klicken auf "Verstanden" bestätigen Sie, dass Sie diese Hinweise gelesen haben und die volle Verantwortung für Ihre Handlungen übernehmen.
-              </p>
+                <div className="border-l-4 border-purple-500 pl-4">
+                  <h4 className="font-semibold mb-2 flex items-center gap-2">
+                    <i className="fas fa-file-contract text-purple-500"></i>
+                    Steam Terms of Service
+                  </h4>
+                  <p className="text-sm">
+                    Before proceeding, please read the official{' '}
+                    <a
+                      href="https://store.steampowered.com/subscriber_agreement/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline font-semibold"
+                    >
+                      Steam Terms of Service
+                    </a>
+                    {' '}to understand what is permitted and what is not.
+                  </p>
+                  <p className="text-xs italic mt-2 text-muted-foreground">
+                    Please read the official Steam Terms of Service to understand what is permitted.
+                  </p>
+                </div>
+
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                  <p className="text-sm font-semibold text-red-800 dark:text-red-200">
+                    By clicking "I Understand" you confirm that you have read these notices and
+                    accept full responsibility for your actions.
+                  </p>
+                  <p className="text-xs italic mt-2 text-red-600 dark:text-red-300">
+                    By clicking "I Understand" you confirm that you have read these notices and accept full responsibility for your actions.
+                  </p>
+                </div>
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogAction onClick={() => setShowLegalDisclaimer(false)} className="w-full">
-              Verstanden / I Understand
+            <AlertDialogAction onClick={() => setShowLegalDisclaimer(false)}>
+              I Understand
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -173,8 +203,8 @@ export default function Games() {
           </div>
 
           {canAddGames && (
-            <Button 
-              className="bg-accent text-accent-foreground" 
+            <Button
+              className="bg-accent text-accent-foreground"
               onClick={() => setShowAddModal(true)}
               data-testid="button-add-game"
             >
