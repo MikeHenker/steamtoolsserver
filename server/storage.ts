@@ -9,6 +9,9 @@ import {
   favorites,
   ratings,
   announcements,
+  globalChatMessages,
+  supportTickets,
+  supportTicketMessages,
   type User,
   type InsertUser,
   type Game,
@@ -27,6 +30,12 @@ import {
   type InsertRating,
   type Announcement,
   type InsertAnnouncement,
+  type GlobalChatMessage,
+  type InsertGlobalChatMessage,
+  type SupportTicket,
+  type InsertSupportTicket,
+  type SupportTicketMessage,
+  type InsertSupportTicketMessage,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql } from "drizzle-orm";
@@ -38,7 +47,7 @@ export interface IStorage {
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUserRole(id: string, role: string): Promise<User>;
-  updateUserProfile(id: string, data: { avatar?: string; bio?: string; theme?: string }): Promise<User>;
+  updateUserProfile(id: string, data: { avatar?: string; bio?: string; theme?: string; profilePicture?: string }): Promise<User>;
   getAllUsers(): Promise<User[]>;
 
   // Games
@@ -97,6 +106,21 @@ export interface IStorage {
   createAnnouncement(announcement: InsertAnnouncement): Promise<Announcement>;
   updateAnnouncement(id: string, data: Partial<InsertAnnouncement>): Promise<Announcement>;
 
+  // Global Chat
+  getAllGlobalChatMessages(limit?: number): Promise<GlobalChatMessage[]>;
+  createGlobalChatMessage(message: InsertGlobalChatMessage): Promise<GlobalChatMessage>;
+
+  // Support Tickets
+  getAllSupportTickets(): Promise<SupportTicket[]>;
+  getSupportTicket(id: string): Promise<SupportTicket | undefined>;
+  getSupportTicketsByUser(userId: string): Promise<SupportTicket[]>;
+  createSupportTicket(ticket: InsertSupportTicket): Promise<SupportTicket>;
+  updateSupportTicketStatus(id: string, status: string): Promise<SupportTicket>;
+  
+  // Support Ticket Messages
+  getMessagesByTicket(ticketId: string): Promise<SupportTicketMessage[]>;
+  createSupportTicketMessage(message: InsertSupportTicketMessage): Promise<SupportTicketMessage>;
+
   // Stats
   getStats(): Promise<{
     totalGames: number;
@@ -133,7 +157,7 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async updateUserProfile(id: string, data: { avatar?: string; bio?: string; theme?: string }): Promise<User> {
+  async updateUserProfile(id: string, data: { avatar?: string; bio?: string; theme?: string; profilePicture?: string }): Promise<User> {
     const [user] = await db.update(users).set(data).where(eq(users.id, id)).returning();
     return user;
   }
@@ -349,6 +373,54 @@ export class DatabaseStorage implements IStorage {
     return updatedAnnouncement;
   }
 
+  // Global Chat
+  async getAllGlobalChatMessages(limit: number = 100): Promise<GlobalChatMessage[]> {
+    return db.select().from(globalChatMessages).orderBy(desc(globalChatMessages.createdAt)).limit(limit);
+  }
+
+  async createGlobalChatMessage(message: InsertGlobalChatMessage): Promise<GlobalChatMessage> {
+    const [newMessage] = await db.insert(globalChatMessages).values(message).returning();
+    return newMessage;
+  }
+
+  // Support Tickets
+  async getAllSupportTickets(): Promise<SupportTicket[]> {
+    return db.select().from(supportTickets).orderBy(desc(supportTickets.createdAt));
+  }
+
+  async getSupportTicket(id: string): Promise<SupportTicket | undefined> {
+    const [ticket] = await db.select().from(supportTickets).where(eq(supportTickets.id, id));
+    return ticket || undefined;
+  }
+
+  async getSupportTicketsByUser(userId: string): Promise<SupportTicket[]> {
+    return db.select().from(supportTickets).where(eq(supportTickets.userId, userId)).orderBy(desc(supportTickets.createdAt));
+  }
+
+  async createSupportTicket(ticket: InsertSupportTicket): Promise<SupportTicket> {
+    const [newTicket] = await db.insert(supportTickets).values(ticket).returning();
+    return newTicket;
+  }
+
+  async updateSupportTicketStatus(id: string, status: string): Promise<SupportTicket> {
+    const updateData: any = { status };
+    if (status === 'completed') {
+      updateData.completedAt = new Date();
+    }
+    const [updatedTicket] = await db.update(supportTickets).set(updateData).where(eq(supportTickets.id, id)).returning();
+    return updatedTicket;
+  }
+
+  // Support Ticket Messages
+  async getMessagesByTicket(ticketId: string): Promise<SupportTicketMessage[]> {
+    return db.select().from(supportTicketMessages).where(eq(supportTicketMessages.ticketId, ticketId)).orderBy(desc(supportTicketMessages.createdAt));
+  }
+
+  async createSupportTicketMessage(message: InsertSupportTicketMessage): Promise<SupportTicketMessage> {
+    const [newMessage] = await db.insert(supportTicketMessages).values(message).returning();
+    return newMessage;
+  }
+
   // Stats
   async getStats(): Promise<{ totalGames: number; totalUsers: number; totalDownloads: number; averageRating: number }> {
     const totalGamesResult = await db.select({ count: sql<number>`count(*)` }).from(games);
@@ -358,7 +430,7 @@ export class DatabaseStorage implements IStorage {
     return {
       totalGames: totalGamesResult[0]?.count || 0,
       totalUsers: totalUsersResult[0]?.count || 0,
-      totalDownloads: 0, // Would need to track downloads separately
+      totalDownloads: 0,
       averageRating: avgRatingResult[0]?.avg || 0,
     };
   }
