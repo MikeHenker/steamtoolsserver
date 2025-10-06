@@ -15,6 +15,7 @@ export const users = pgTable("users", {
   password: text("password").notNull(),
   role: userRoleEnum("role").notNull().default('basic'),
   avatar: text("avatar").default('🎮'),
+  profilePicture: text("profile_picture"), // Base64 encoded image
   bio: text("bio"),
   theme: text("theme").default('dark'),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -85,6 +86,36 @@ export const requests = pgTable("requests", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// Global Chat Messages table
+export const globalChatMessages = pgTable("global_chat_messages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  content: text("content").notNull(),
+  userId: varchar("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Support Tickets table
+export const supportTickets = pgTable("support_tickets", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  userId: varchar("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  status: text("status").default('open'), // open, in_progress, completed
+  priority: text("priority").default('medium'), // low, medium, high
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  completedAt: timestamp("completed_at"),
+});
+
+// Support Ticket Messages table
+export const supportTicketMessages = pgTable("support_ticket_messages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  content: text("content").notNull(),
+  ticketId: varchar("ticket_id").references(() => supportTickets.id, { onDelete: "cascade" }).notNull(),
+  userId: varchar("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  isAdminReply: boolean("is_admin_reply").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // Favorites table
 export const favorites = pgTable("favorites", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -120,6 +151,9 @@ export const usersRelations = relations(users, ({ many }) => ({
   requests: many(requests),
   favorites: many(favorites),
   ratings: many(ratings),
+  globalChatMessages: many(globalChatMessages),
+  supportTickets: many(supportTickets),
+  supportTicketMessages: many(supportTicketMessages),
 }));
 
 export const gamesRelations = relations(games, ({ one, many }) => ({
@@ -208,6 +242,32 @@ export const ratingsRelations = relations(ratings, ({ one }) => ({
   }),
 }));
 
+export const globalChatMessagesRelations = relations(globalChatMessages, ({ one }) => ({
+  user: one(users, {
+    fields: [globalChatMessages.userId],
+    references: [users.id],
+  }),
+}));
+
+export const supportTicketsRelations = relations(supportTickets, ({ one, many }) => ({
+  user: one(users, {
+    fields: [supportTickets.userId],
+    references: [users.id],
+  }),
+  messages: many(supportTicketMessages),
+}));
+
+export const supportTicketMessagesRelations = relations(supportTicketMessages, ({ one }) => ({
+  ticket: one(supportTickets, {
+    fields: [supportTicketMessages.ticketId],
+    references: [supportTickets.id],
+  }),
+  user: one(users, {
+    fields: [supportTicketMessages.userId],
+    references: [users.id],
+  }),
+}));
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -256,6 +316,23 @@ export const insertAnnouncementSchema = createInsertSchema(announcements).omit({
   createdAt: true,
 });
 
+export const insertGlobalChatMessageSchema = createInsertSchema(globalChatMessages).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertSupportTicketSchema = createInsertSchema(supportTickets).omit({
+  id: true,
+  status: true,
+  createdAt: true,
+  completedAt: true,
+});
+
+export const insertSupportTicketMessageSchema = createInsertSchema(supportTicketMessages).omit({
+  id: true,
+  createdAt: true,
+});
+
 // Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -275,6 +352,12 @@ export type Rating = typeof ratings.$inferSelect;
 export type InsertRating = z.infer<typeof insertRatingSchema>;
 export type Announcement = typeof announcements.$inferSelect;
 export type InsertAnnouncement = z.infer<typeof insertAnnouncementSchema>;
+export type GlobalChatMessage = typeof globalChatMessages.$inferSelect;
+export type InsertGlobalChatMessage = z.infer<typeof insertGlobalChatMessageSchema>;
+export type SupportTicket = typeof supportTickets.$inferSelect;
+export type InsertSupportTicket = z.infer<typeof insertSupportTicketSchema>;
+export type SupportTicketMessage = typeof supportTicketMessages.$inferSelect;
+export type InsertSupportTicketMessage = z.infer<typeof insertSupportTicketMessageSchema>;
 
 // Login schema
 export const loginSchema = z.object({
