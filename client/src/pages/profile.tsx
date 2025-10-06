@@ -15,6 +15,7 @@ export default function Profile() {
   
   const [avatar, setAvatar] = useState(user?.avatar || "🎮");
   const [bio, setBio] = useState(user?.bio || "");
+  const [profilePicture, setProfilePicture] = useState(user?.profilePicture || "");
 
   const { data: favorites = [] } = useQuery<Favorite[]>({
     queryKey: ["/api/favorites", user?.id],
@@ -27,7 +28,7 @@ export default function Profile() {
   });
 
   const updateProfile = useMutation({
-    mutationFn: async (data: { avatar: string; bio: string }) => {
+    mutationFn: async (data: { avatar: string; bio: string; profilePicture?: string }) => {
       await authenticatedApiRequest("PATCH", `/api/users/${user?.id}/profile`, data);
     },
     onSuccess: () => {
@@ -39,9 +40,29 @@ export default function Profile() {
     },
   });
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast({
+        variant: "destructive",
+        title: "File too large",
+        description: "Profile picture must be less than 2MB",
+      });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setProfilePicture(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    updateProfile.mutate({ avatar, bio });
+    updateProfile.mutate({ avatar, bio, profilePicture });
   };
 
   return (
@@ -52,11 +73,18 @@ export default function Profile() {
             <Card>
               <CardContent className="p-6">
                 <div className="text-center mb-6">
-                  <div className="w-24 h-24 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-5xl">{user?.avatar || '🎮'}</span>
+                  <div className="w-24 h-24 bg-gradient-to-br from-orange-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4 relative overflow-hidden border-4 border-orange-500/30">
+                    {(profilePicture || user?.profilePicture) ? (
+                      <img src={profilePicture || user?.profilePicture} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-5xl">{user?.avatar || '🎮'}</span>
+                    )}
+                    <div className="absolute bottom-0 right-0 bg-orange-500 rounded-full p-1">
+                      <span className="text-sm">🎃</span>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-bold mb-1" data-testid="text-profile-username">{user?.username}</h3>
-                  <p className="text-sm text-accent font-semibold" data-testid="text-profile-role">{user?.role}</p>
+                  <h3 className="text-xl font-bold mb-1 bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent" data-testid="text-profile-username">{user?.username}</h3>
+                  <p className="text-sm text-orange-500 font-semibold" data-testid="text-profile-role">{user?.role}</p>
                 </div>
 
                 <div className="space-y-4 border-t border-border pt-4">
@@ -78,13 +106,24 @@ export default function Profile() {
 
                 <form onSubmit={handleSubmit} className="mt-6 space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Avatar Emoji</label>
+                    <label className="block text-sm font-medium mb-2 text-orange-500">🎃 Profile Picture</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-500 file:text-white hover:file:bg-orange-600"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">Max 2MB</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Avatar Emoji (fallback)</label>
                     <Input
                       type="text"
                       value={avatar}
                       onChange={(e) => setAvatar(e.target.value)}
                       maxLength={2}
                       data-testid="input-avatar"
+                      className="border-orange-500/30 focus:border-orange-500"
                     />
                   </div>
                   <div>
@@ -95,10 +134,11 @@ export default function Profile() {
                       rows={4}
                       placeholder="Tell us about yourself..."
                       data-testid="textarea-bio"
+                      className="border-orange-500/30 focus:border-orange-500"
                     />
                   </div>
-                  <Button type="submit" className="w-full" disabled={updateProfile.isPending} data-testid="button-update-profile">
-                    <i className="fas fa-save mr-2"></i>Save Changes
+                  <Button type="submit" className="w-full bg-orange-500 hover:bg-orange-600" disabled={updateProfile.isPending} data-testid="button-update-profile">
+                    <i className="fas fa-save mr-2"></i>Save Changes 🎃
                   </Button>
                 </form>
               </CardContent>

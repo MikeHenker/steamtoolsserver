@@ -12,6 +12,8 @@ import Requests from "@/pages/requests";
 import Users from "@/pages/users";
 import Profile from "@/pages/profile";
 import AdminPanel from "@/pages/admin";
+import GlobalChat from "@/pages/global-chat";
+import Support from "@/pages/support";
 import Navigation from "@/components/navigation";
 
 function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
@@ -54,6 +56,12 @@ function Router() {
       </Route>
       <Route path="/profile">
         <ProtectedRoute component={Profile} />
+      </Route>
+      <Route path="/chat">
+        <ProtectedRoute component={GlobalChat} />
+      </Route>
+      <Route path="/support">
+        <ProtectedRoute component={Support} />
       </Route>
       <Route component={NotFound} />
     </Switch>

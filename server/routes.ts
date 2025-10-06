@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { authenticateToken, requireRole, generateToken, hashPassword, comparePassword } from "./auth";
-import { insertUserSchema, loginSchema, insertGameSchema, insertCommentSchema, insertRequestSchema, insertRatingSchema } from "@shared/schema";
+import { insertUserSchema, loginSchema, insertGameSchema, insertCommentSchema, insertRequestSchema, insertRatingSchema, insertGlobalChatMessageSchema, insertSupportTicketSchema, insertSupportTicketMessageSchema } from "@shared/schema";
 import multer from "multer";
 import path from "path";
 
@@ -127,8 +127,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: "Cannot update other user's profile" });
       }
 
-      const { avatar, bio, theme } = req.body;
-      const user = await storage.updateUserProfile(id, { avatar, bio, theme });
+      const { avatar, bio, theme, profilePicture } = req.body;
+      const user = await storage.updateUserProfile(id, { avatar, bio, theme, profilePicture });
       res.json({ ...user, password: undefined });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -382,6 +382,110 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(announcement || null);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Global Chat routes
+  app.get("/api/chat/global", authenticateToken, async (req, res) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : 100;
+      const messages = await storage.getAllGlobalChatMessages(limit);
+      res.json(messages);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/chat/global", authenticateToken, async (req, res) => {
+    try {
+      const { userId } = (req as any).user;
+      const data = insertGlobalChatMessageSchema.parse({ ...req.body, userId });
+      const message = await storage.createGlobalChatMessage(data);
+      res.json(message);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Support Tickets routes
+  app.get("/api/support", authenticateToken, async (req, res) => {
+    try {
+      const { userId, role } = (req as any).user;
+      
+      let tickets;
+      if (role === "admin") {
+        tickets = await storage.getAllSupportTickets();
+      } else {
+        tickets = await storage.getSupportTicketsByUser(userId);
+      }
+      
+      res.json(tickets);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/support/:id", authenticateToken, async (req, res) => {
+    try {
+      const ticket = await storage.getSupportTicket(req.params.id);
+      if (!ticket) {
+        return res.status(404).json({ message: "Ticket not found" });
+      }
+      res.json(ticket);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/support", authenticateToken, async (req, res) => {
+    try {
+      const { userId } = (req as any).user;
+      const data = insertSupportTicketSchema.parse({ ...req.body, userId });
+      const ticket = await storage.createSupportTicket(data);
+      res.json(ticket);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  app.patch("/api/support/:id/status", authenticateToken, requireRole("admin"), async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+      const ticket = await storage.updateSupportTicketStatus(id, status);
+      res.json(ticket);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Support Ticket Messages routes
+  app.get("/api/support/:ticketId/messages", authenticateToken, async (req, res) => {
+    try {
+      const messages = await storage.getMessagesByTicket(req.params.ticketId);
+      res.json(messages);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/support/:ticketId/messages", authenticateToken, async (req, res) => {
+    try {
+      const { userId, role } = (req as any).user;
+      const { ticketId } = req.params;
+      const isAdminReply = role === "admin";
+      
+      const data = insertSupportTicketMessageSchema.parse({ 
+        ...req.body, 
+        ticketId, 
+        userId,
+        isAdminReply 
+      });
+      
+      const message = await storage.createSupportTicketMessage(data);
+      res.json(message);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
     }
   });
 
