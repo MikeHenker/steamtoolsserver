@@ -101,4 +101,4 @@ app.use((req, res, next) => {
       console.log(`Serving on port ${port}`);
     }
   );
-})();
+})(); // ← this closes the outer async IIFE
