@@ -4,7 +4,7 @@ import { setupVite, serveStatic, log } from "./vite";
 import { exec } from "child_process";
 import { promisify } from "util";
 import { seedAdmins } from "./seed-admins";
-import http from "http"; // ✅ Wichtig für server.listen()
+import http from "http";
 
 const execAsync = promisify(exec);
 const app = express();
@@ -66,8 +66,7 @@ app.use((req, res, next) => {
   await runMigrations();
   await seedAdmins();
 
-  await registerRoutes(app); // ✅ Nur Routing, kein Serverobjekt
-  const server = http.createServer(app); // ✅ Erstelle echten HTTP-Server
+  await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
@@ -77,12 +76,17 @@ app.use((req, res, next) => {
   });
 
   if (app.get("env") === "development") {
-    await setupVite(app, server);
+    // Vite setup must happen before server creation
+    const tempServer = http.createServer(app);
+    await setupVite(app, tempServer);
   } else {
     serveStatic(app);
   }
 
-  const port = parseInt(process.env.PORT, 10); // ✅ Render erwartet exakt diesen Port
+  // ✅ Create server AFTER all middleware and routes are set
+  const server = http.createServer(app);
+
+  const port = parseInt(process.env.PORT, 10);
   server.listen(port, "0.0.0.0", () => {
     console.log(`✅ Server is listening on port ${port}`);
   });
