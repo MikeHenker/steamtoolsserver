@@ -62,10 +62,14 @@ app.use((req, res, next) => {
   next();
 });
 
+// Optional: health check for Render
+app.get("/healthz", (_req, res) => {
+  res.status(200).send("OK");
+});
+
 (async () => {
   await runMigrations();
   await seedAdmins();
-
   await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -76,17 +80,16 @@ app.use((req, res, next) => {
   });
 
   if (app.get("env") === "development") {
-    // Vite setup must happen before server creation
     const tempServer = http.createServer(app);
     await setupVite(app, tempServer);
   } else {
     serveStatic(app);
   }
 
-  // ✅ Create server AFTER all middleware and routes are set
+  const port = parseInt(process.env.PORT, 10);
   const server = http.createServer(app);
 
-  const port = parseInt(process.env.PORT, 10);
+  console.log("⚠️ About to call server.listen...");
   server.listen(port, "0.0.0.0", () => {
     console.log(`✅ Server is listening on port ${port}`);
   });
